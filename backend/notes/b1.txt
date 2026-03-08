@@ -1,0 +1,23 @@
+Request flow
+ 
+Client
+ ↓
+Routes
+ ↓
+Controller
+ ↓
+Model
+ ↓
+Database
+ ↓
+Response
+
+flow
+
+authRoutes.js
+  ↓
+authController.js
+  ↓
+User model
+  ↓
+MongoDB
