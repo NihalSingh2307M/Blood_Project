@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const app = require("./src/app")
 const connectDb = require("./src/config/db")
 const authRoutes = require("./src/routes/authRoutes")
