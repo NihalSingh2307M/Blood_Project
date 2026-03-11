@@ -31,4 +31,41 @@ const createDonation = async(req,res) =>{
     }
 }
 
-module.exports = {createDonation}
+//get donation single user-->api/donation/my--(doantion for logged in user)
+
+const getMyDonations = async(req,res) =>{
+    try{
+
+        const donations = await Donation.find({donor:req.user._id})
+
+        res.json({
+            success:true,
+            donations
+        })
+    }catch(error){
+        res.json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+//get all donation --->api/donation/all
+
+const getAllDonations = async(req,res) =>{
+    try{
+
+        const donations = await Donation.find().populate("donor","name email")
+        res.json({
+            success:true,
+            donations
+        })
+    }catch(error){
+        res.json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+module.exports = {createDonation,getMyDonations,getAllDonations}
