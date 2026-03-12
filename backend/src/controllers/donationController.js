@@ -115,4 +115,36 @@ const donorLeaderboard = async(req,res) =>{
     }
 }
 
-module.exports = {createDonation,getMyDonations,getAllDonations,donorLeaderboard}
+//blood statistic availability
+
+const bloodStats = async (req,res)=>{
+    try{
+        const stats = await Donation.aggregate([
+            {
+                $group:{
+                _id:"$bloodGroup",
+                totalUnits:{$sum:"$unitsDonated"}
+            }
+            },
+            {
+                $project:{
+                    _id:0,
+                    bloodGroup:"$id",
+                    totalUnits:1
+                }
+            }
+        ])
+
+        res.json({
+            success:true,
+            stats
+        })
+    }catch(error){
+        res.json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+module.exports = {createDonation,getMyDonations,getAllDonations,donorLeaderboard,bloodStats}
