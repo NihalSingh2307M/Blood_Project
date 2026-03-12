@@ -68,4 +68,51 @@ const getAllDonations = async(req,res) =>{
     }
 }
 
-module.exports = {createDonation,getMyDonations,getAllDonations}
+//Donor LeaderBoard
+
+const donorLeaderboard = async(req,res) =>{
+    try{
+        const leaderboard = await Donation.aggregate([
+            {
+                $group:{
+                    _id:"$donor",
+                    totalUnits:{$sum:"$unitsDonated"}
+                }
+            },
+            {
+                $sort:{totalUnits:-1}
+            },
+            {
+                $lookup:{
+                    from:"users",
+                    localField:"_id",
+                    foreignField:"_id",
+                    as:"donor"
+                }
+            },
+            {
+                $unwind:"$donor"
+            },
+            {
+                $project:{
+                    _id:0,
+                    name:"$donor.name",
+                    bloodGroup:"$donor.bloodGroup",
+                    totalUnits:1
+                }
+            }
+        ])
+
+        res.json({
+            success:true,
+            leaderboard
+        })
+    }catch(error){
+        res.json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+module.exports = {createDonation,getMyDonations,getAllDonations,donorLeaderboard}
